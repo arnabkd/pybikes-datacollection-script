@@ -4,8 +4,9 @@ import pybikes, datetime, time, threading, logging, string, os
 LOG_FILENAME = "datacollection.log"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 system = 'bixi'
-names = ['bixi-toronto' ,'capital-bixi', 'bixi-montreal', 'capital-bikeshare', 'citi-bike-nyc', 'barclays-cycle-hire', 'divvy']
+names = ['capital-bikeshare', 'citi-bike-nyc', 'barclays-cycle-hire', 'divvy']
 script_timer = 300
+data_folder_path = "../../pybikes-datacollection/data/"
 
 #City objects
 city_objects = []
@@ -51,7 +52,7 @@ def save_stations_JSON():
     for city in city_objects:
       city.update()
       json_file_content = city_json(city)
-      targetdir = "../data/" + city.meta['city'] + "/"
+      targetdir = data_folder_path + city.meta['city'] + "/"
       if not os.path.exists(targetdir):
         os.mkdir(targetdir)
       
@@ -63,7 +64,7 @@ def save_stations_JSON():
       logging.debug("Wrote data to " + json_file_name)
   except:
     logging.exception("Error (something awful happened):")
-  threading.Timer(collection_timeout, save_stations_JSON).start()
+  threading.Timer(script_timer, save_stations_JSON).start()
 
 
 #Start log
